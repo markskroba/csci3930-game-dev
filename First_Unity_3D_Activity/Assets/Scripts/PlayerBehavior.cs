@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class PlayerBehavior : MonoBehaviour
 {
+    public GameObject Bullet;
+    public float BulletSpeed = 100f;
+    private bool _isShooting;
+
     public float MoveSpeed = 10f;
     public float RotateSpeed = 75f;
     public float _vInput;
@@ -29,6 +33,7 @@ public class PlayerBehavior : MonoBehaviour
     void Update()
     {
         _isJumping |= Input.GetKeyDown(KeyCode.J);
+        _isShooting |= Input.GetKeyDown(KeyCode.Space);
         _vInput = Input.GetAxis("Vertical") * MoveSpeed;
         _hInput = Input.GetAxis("Horizontal") * RotateSpeed;
         //this.transform.Translate(Vector3.forward * _vInput * Time.deltaTime);
@@ -37,6 +42,13 @@ public class PlayerBehavior : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (_isShooting)
+        {
+            GameObject newBullet = Instantiate(Bullet, this.transform.position + new Vector3(0, 0, 1), this.transform.rotation);
+            Rigidbody BulletRB = newBullet.GetComponent<Rigidbody>();
+            BulletRB.velocity = this.transform.forward * BulletSpeed;
+        }
+        _isShooting = false;
         if (IsGrounded() && _isJumping)
         {
             _rb.AddForce(Vector3.up * JumpVelocity, ForceMode.Impulse);
