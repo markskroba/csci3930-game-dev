@@ -56,7 +56,7 @@ public class PlayerBehavior : MonoBehaviour
             capsuleBottom, DistanceToGround, GroundLayer,
             QueryTriggerInteraction.Ignore);
 
-        Debug.Log(grounded);
+        //Debug.Log(grounded);
         return grounded;
     }
 }
