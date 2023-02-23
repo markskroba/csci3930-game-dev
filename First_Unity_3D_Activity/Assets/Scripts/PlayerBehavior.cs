@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class PlayerBehavior : MonoBehaviour
 {
-    public GameObject Bullet;
+    //public GameObject Bullet;
+    public Rigidbody Bullet;
     public float BulletSpeed = 100f;
     private bool _isShooting;
+
+    public AudioClip throwSound = null;
 
     public float MoveSpeed = 10f;
     public float RotateSpeed = 75f;
@@ -44,9 +47,20 @@ public class PlayerBehavior : MonoBehaviour
     {
         if (_isShooting)
         {
-            GameObject newBullet = Instantiate(Bullet, this.transform.position + new Vector3(0, 0, 1), this.transform.rotation);
-            Rigidbody BulletRB = newBullet.GetComponent<Rigidbody>();
-            BulletRB.velocity = this.transform.forward * BulletSpeed;
+            Rigidbody newBullet = Instantiate(Bullet, this.transform.position + new Vector3(0, 0.75f, 0), this.transform.rotation * this.Bullet.transform.rotation);
+       
+            //Rigidbody BulletRB = newBullet.GetComponent<Rigidbody>();
+            Physics.IgnoreCollision(newBullet.GetComponent<Collider>(), this.gameObject.GetComponent<Collider>());
+            newBullet.velocity = this.transform.forward * BulletSpeed;
+
+            if (throwSound)
+            {
+                AudioSource audioPlayer = newBullet.GetComponent<AudioSource>();
+                if (audioPlayer != null)
+                    audioPlayer.PlayOneShot(throwSound);
+                else
+                    Debug.Log("Your " + newBullet.gameObject.name + " prefab must have an audio source.");
+            }
         }
         _isShooting = false;
         if (IsGrounded() && _isJumping)
