@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class BrickBehavior : MonoBehaviour
 {
+    public Rigidbody Bullet;
+
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.name == "Bullet(Clone)")
+        Debug.Log(collision.gameObject.name);
+        if (collision.gameObject.name == Bullet.gameObject.name + "(Clone)")
         {
             Destroy(this.transform.gameObject);
             Destroy(collision.gameObject);
