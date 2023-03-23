@@ -7,7 +7,7 @@ public class CameraShooting : MonoBehaviour
     public Rigidbody Bullet;
     public AudioClip throwSound = null;
 
-    public float BulletSpeed = 100f;
+    public float BulletSpeed = 1f;
     private bool _isShooting;
     
 
@@ -26,8 +26,8 @@ public class CameraShooting : MonoBehaviour
         if (_isShooting)
         {
             Rigidbody newBullet = Instantiate(Bullet,
-                        this.transform.position + new Vector3(0, -1f, 0),
-                        this.transform.rotation);
+                        this.transform.position + new Vector3(0, -0.5f, 0),
+                        this.transform.rotation * this.Bullet.transform.rotation);
             Physics.IgnoreCollision(newBullet.GetComponent<Collider>(), GameObject.Find("Player").GetComponent<Collider>());
             newBullet.velocity = this.transform.forward * BulletSpeed;
 
