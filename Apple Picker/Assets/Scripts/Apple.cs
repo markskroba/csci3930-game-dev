@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Apple : MonoBehaviour
 {
+    public int points;
     public static float bottomY = -20f;
 
     // Update is called once per frame
