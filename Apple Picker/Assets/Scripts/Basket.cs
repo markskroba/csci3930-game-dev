@@ -26,8 +26,11 @@ public class Basket : MonoBehaviour
     void OnCollisionEnter(Collision coll) {
         GameObject collidedWith = coll.gameObject;
         if (collidedWith.CompareTag("Apple")) {
-            if (collidedWith.gameObject.name == "Poison Apple(Clone)")
-            { }
+            if (collidedWith.gameObject.name == "PoisonApple(Clone)")
+            {
+                ApplePicker apScript = Camera.main.GetComponent<ApplePicker>();
+                apScript.AppleMissed();
+            }
 
             scoreCounter.score += collidedWith.GetComponent<Apple>().points;
             Destroy(collidedWith);

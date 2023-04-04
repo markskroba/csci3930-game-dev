@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571336, b: 0.3069219, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.2257134, b: 0.30692226, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -684,6 +684,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1819488318234691695, guid: 675590b5008ec894bb43ff20a5a7a860, type: 3}
+      propertyPath: level
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1819488318234691695, guid: 675590b5008ec894bb43ff20a5a7a860, type: 3}
+      propertyPath: goldenApplePrefab
+      value: 
+      objectReference: {fileID: 3619803776095265419, guid: 3f2897c5982aa4c278ee2492052c2845, type: 3}
+    - target: {fileID: 1819488318234691695, guid: 675590b5008ec894bb43ff20a5a7a860, type: 3}
+      propertyPath: poisonApplePrefab
+      value: 
+      objectReference: {fileID: 7074307040548335573, guid: a382330ba99e74f0b8ffd4e5a7a71eac, type: 3}
     - target: {fileID: 3409509766829892088, guid: 675590b5008ec894bb43ff20a5a7a860, type: 3}
       propertyPath: m_RootOrder
       value: 2
