@@ -10,7 +10,8 @@ public class Apple : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (transform.position.y < bottomY) {
+        if (transform.position.y < bottomY && points > 0) {
+            Debug.Log(points);
             Destroy(this.gameObject);
 
             ApplePicker apScript = Camera.main.GetComponent<ApplePicker>();

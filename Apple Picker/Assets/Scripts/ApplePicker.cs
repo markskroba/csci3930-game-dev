@@ -7,6 +7,7 @@ public class ApplePicker : MonoBehaviour
 {
     [Header("Inscribed")]
     public GameObject basketPrefab;
+    public GameObject boatPrefab;
     public int numBaskets = 3;
     public float basketBottomY = -14f;
     public float basketSpacingY = 2f;

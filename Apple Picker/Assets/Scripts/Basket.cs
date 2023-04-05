@@ -26,7 +26,7 @@ public class Basket : MonoBehaviour
     void OnCollisionEnter(Collision coll) {
         GameObject collidedWith = coll.gameObject;
         if (collidedWith.CompareTag("Apple")) {
-            if (collidedWith.gameObject.name == "PoisonApple(Clone)")
+            if (collidedWith.GetComponent<Apple>().points == 0)
             {
                 ApplePicker apScript = Camera.main.GetComponent<ApplePicker>();
                 apScript.AppleMissed();
