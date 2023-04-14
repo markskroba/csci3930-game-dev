@@ -98,7 +98,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CamOffset: {x: 0, y: 1.2, z: -2.6}
-  CamRotationOffset: {x: -15, y: 0, z: 0}
   panSpeed: 200
 --- !u!1 &9213102615263240958
 GameObject:
@@ -236,6 +235,3 @@ MonoBehaviour:
   GroundLayer:
     serializedVersion: 2
     m_Bits: 64
-  Bullet: {fileID: 0}
-  BulletSpeed: 100
-  throwSound: {fileID: 0}

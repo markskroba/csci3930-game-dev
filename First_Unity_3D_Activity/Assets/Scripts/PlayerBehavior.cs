@@ -17,7 +17,7 @@ public class PlayerBehavior : MonoBehaviour
     public float _hInput;
 
     public float JumpVelocity = 5f;
-    private bool _isJumping;
+    public bool _isJumping;
 
     public float DistanceToGround = 0.1f;
     public LayerMask GroundLayer;
@@ -63,6 +63,7 @@ public class PlayerBehavior : MonoBehaviour
             }
         }
         _isShooting = false;
+
         if (IsGrounded() && _isJumping)
         {
             _rb.AddForce(Vector3.up * JumpVelocity, ForceMode.Impulse);
@@ -74,7 +75,7 @@ public class PlayerBehavior : MonoBehaviour
         _rb.MoveRotation(_rb.rotation * angleRot);
     }
 
-    private bool IsGrounded()
+    public bool IsGrounded()
     {
         Vector3 capsuleBottom = new Vector3(_col.bounds.center.x,
             _col.bounds.min.y, _col.bounds.center.z);
@@ -82,7 +83,6 @@ public class PlayerBehavior : MonoBehaviour
             capsuleBottom, DistanceToGround, GroundLayer,
             QueryTriggerInteraction.Ignore);
 
-        //Debug.Log(grounded);
         return grounded;
     }
 }
