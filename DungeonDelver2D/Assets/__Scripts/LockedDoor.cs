@@ -34,7 +34,7 @@ public class LockedDoor : MonoBehaviour, ISwappable
         if (_LOCKED_DOORS == null) {
             BoundsInt mapBounds = MapInfo.GET_MAP_BOUNDS();
             _LOCKED_DOORS = new LockedDoor[mapBounds.size.x, mapBounds.size.y];
-            InitDorInfoDict();
+            InitDoorInfoDict();
         }
         mapLoc = Vector2Int.FloorToInt(transform.position);
         _LOCKED_DOORS[mapLoc.x, mapLoc.y] = this;
