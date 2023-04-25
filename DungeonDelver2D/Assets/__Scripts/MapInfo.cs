@@ -49,8 +49,9 @@ public class MapInfo : MonoBehaviour
                     MAP[i,j] = int.Parse (tileNums[i], NumberStyles.HexNumber);
             }
         }
+        TileSwapManager.SWAP_TILES(MAP);
+        Debug.Log("Map size: " + W + " wide by " + H + " high");
 
-        Debug.Log ("Map size: " + W + " wide by " + H + " high");
     }
 
     /// <summary>

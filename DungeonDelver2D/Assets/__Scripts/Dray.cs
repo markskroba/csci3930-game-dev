@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent (typeof(InRoom))]
-// public class Dray : MonoBehaviour, IFacingMover, IKeyMaster
-public class Dray : MonoBehaviour, IFacingMover
+ public class Dray : MonoBehaviour, IFacingMover, IKeyMaster
 {
     static private Dray         S;
     static public IFacingMover  IFM;
@@ -249,12 +248,14 @@ public class Dray : MonoBehaviour, IFacingMover
     }
 
     // // ---------------- Implementation of IKeyMaster -------------------
-    // public int keyCount {
-    //     get { return _numKeys; }
-    //     set { _numKeys = value; }
-    // }
+    public int keyCount
+    {
+        get { return _numKeys; }
+        set { _numKeys = value; }
+    }
 
-    // public Vector2 pos {
-    //     get { return (Vector2) transform.position; }
-    // }
+    public Vector2 pos
+    {
+        get { return (Vector2)transform.position; }
+    }
 }
