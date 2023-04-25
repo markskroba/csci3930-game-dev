@@ -15,6 +15,8 @@ GameObject:
   - component: {fileID: 5949686309062075085}
   - component: {fileID: 5949686309062075086}
   - component: {fileID: 5949686309062075087}
+  - component: {fileID: 2038562738}
+  - component: {fileID: 2038562739}
   m_Layer: 7
   m_Name: Skeletos
   m_TagString: Untagged
@@ -142,12 +144,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1edec2c5e6024da3be741ecb801f41b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 1
+  maxHealth: 4
   knockbackSpeed: 10
   knockbackDuration: 0.25
   invincibleDuration: 0.5
-  _guaranteedDrop: {fileID: 0}
-  randomItems: []
+  guaranteedDrop: {fileID: 0}
+  randomItems:
+  - {fileID: 274309014792617193, guid: 8ae76853f5c2d1e4581b6ece9b596c32, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   health: 0
   invincible: 0
   knockback: 0
@@ -183,3 +189,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbc160ce7f5a5471096dcfb2ebef46af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!58 &2038562738
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5949686309062075120}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.5
+--- !u!114 &2038562739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5949686309062075120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 178b84a7149f7ce4dab6dd3f6ac2c34f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 1
+  knockback: 1

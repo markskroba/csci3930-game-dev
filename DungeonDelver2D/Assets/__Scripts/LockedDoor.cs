@@ -40,6 +40,55 @@ public class LockedDoor : MonoBehaviour, ISwappable
         _LOCKED_DOORS[mapLoc.x, mapLoc.y] = this;
     }
 
+
+    void OnCollisionStay2D(Collision2D coll)
+    {
+        if (GET_LOCKED_DOOR(mapLoc) == null) return;                      
+
+        IKeyMaster iKeyM = coll.gameObject.GetComponent<IKeyMaster>();
+        if (iKeyM == null) return;
+
+        if (!_DOOR_INFO_DICT.ContainsKey(tileNum))
+        {
+            Debug.LogError("_DOOR_INFO_DICT has no key " + tileNum);
+            return;
+        }
+
+        DoorInfo myDoor = _DOOR_INFO_DICT[tileNum];
+        int reqFacing = GetRequiredFacingToOpenDoor(iKeyM);                  
+        if (iKeyM.keyCount > 0 && iKeyM.GetFacing() == reqFacing) {
+            iKeyM.keyCount--;
+            Destroy(gameObject);
+            _LOCKED_DOORS[mapLoc.x, mapLoc.y] = null;
+            if (myDoor.otherHalf == Vector2Int.zero) return ;
+            Vector2Int otherHalfLoc = mapLoc + myDoor.otherHalf;
+            LockedDoor otherLD = GET_LOCKED_DOOR(otherHalfLoc);
+            if (otherLD != null) {
+                Destroy(otherLD.gameObject);
+                _LOCKED_DOORS[otherHalfLoc.x, otherHalfLoc.y] = null;
+            }
+        }
+
+    }
+
+    int GetRequiredFacingToOpenDoor(IKeyMaster iKeyM) {
+        Vector2 relPos = (Vector2) transform.position - iKeyM.pos;
+        if (Mathf.Abs(relPos.x) > Mathf.Abs(relPos.y)) {
+            return (relPos.x > 0) ? 0 : 2;
+        } else {
+            return (relPos.y > 0) ? 1 : 3;
+        }
+    }
+
+    static LockedDoor GET_LOCKED_DOOR(Vector2Int mLoc) {
+        if (_LOCKED_DOORS == null) return null;
+        if (mLoc.x < 0 || mLoc.x >= _LOCKED_DOORS.GetLength(0)) return null;
+        if (mLoc.y < 0 || mLoc.y >= _LOCKED_DOORS.GetLength(1)) return null;
+        return _LOCKED_DOORS[mLoc.x, mLoc.y];
+
+    }
+
+
     void InitDoorInfoDict()
     {
         _DOOR_INFO_DICT = new Dictionary<int, DoorInfo>();
@@ -50,11 +99,6 @@ public class LockedDoor : MonoBehaviour, ISwappable
         new DoorInfo(LOCKED_L, Vector2Int.zero);
         new DoorInfo(LOCKED_DL, Vector2Int.right);
         new DoorInfo(LOCKED_DR, Vector2Int.left);
-    }
-
-    void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.GetComponent<Dray>() != null) Destroy(gameObject);
     }
 
     public GameObject guaranteedDrop { get; set; }

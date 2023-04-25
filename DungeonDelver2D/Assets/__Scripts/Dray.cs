@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent (typeof(InRoom))]
- public class Dray : MonoBehaviour, IFacingMover, IKeyMaster
+public class Dray : MonoBehaviour, IFacingMover, IKeyMaster
 {
     static private Dray         S;
     static public IFacingMover  IFM;
@@ -67,27 +67,15 @@ using UnityEngine;
         health = maxHealth;
     }
 
-    // // Update is called once per frame
-    // void Update()
-    // {
-    //     for (int i = 0; i < keys.Length; i++) {
-    //         if (Input.GetKey(keys[i])) dirHeld = i % 4;
-    //     }
-
-    //     Vector2 vel = Vector2.zero;
-    //     if (dirHeld > -1) vel = directions[dirHeld];
-    //     rigid.velocity = vel * speed;
-    //     if (dirHeld == -1)
-    //     {
-    //         anim.speed = 0;
-    //     }
-    //     else {
-    //         anim.Play("Dray_Walk_" + dirHeld);
-    //         anim.speed = 1;
-    //     }
-    // }
-
     void Update() {
+        if (invincible && Time.time > invincibleDone) invincible = false;
+        sRend.color = invincible ? Color.red : Color.white;
+        if (mode == eMode.knockback) {
+            rigid.velocity = knockbackVel;
+            if (Time.time < knockbackDone) return ;
+            mode = eMode.idle;
+        }
+
         if (mode == eMode.roomTrans) {
             rigid.velocity = Vector3.zero;
             anim.speed = 0;
@@ -177,46 +165,61 @@ using UnityEngine;
         }
     }
 
-    // void OnCollisionEnter2D (Collision2D coll)
-    // {
-    //     if (invincible) return;      // Return if Dray can't be damaged
-    //     DamageEffect dEf = coll.gameObject.GetComponent<DamageEffect>();
-    //     if (dEf == null) return;    // If no DamageEffect, exit
+    void OnCollisionEnter2D (Collision2D coll)
+    {
+        if (invincible) return;      // Return if Dray can't be damaged
+        DamageEffect dEf = coll.gameObject.GetComponent<DamageEffect>();
+        if (dEf == null) return;    // If no DamageEffect, exit
 
-    //     health -= dEf.damage;       // Subtract the damage amount from health
-    //     invincible = true;
-    //     invincibleDone = Time.time + invincibleDuration;
+        health -= dEf.damage;       // Subtract the damage amount from health
+        invincible = true;
+        invincibleDone = Time.time + invincibleDuration;
 
-    //     if (dEf.knockback)
-    //     {
-    //         // Knockback Dray
-    //         // Determine the direction of knockback from relative position
-    //         Vector2 delta = transform.position - coll.transform.position;
-    //         if (Mathf.Abs (delta.x) >= Mathf.Abs (delta.y))
-    //         {
-    //             // Knockback should be horizontal
-    //             delta.x = (delta.x > 0) ? 1 : -1;
-    //             delta.y = 0;
-    //         }
-    //         else
-    //         {
-    //             // Knockback should be vertical
-    //             delta.y = (delta.y > 0) ? 1 : -1;
-    //             delta.x = 0;                
-    //         }
+        if (dEf.knockback)
+        {
+            // Knockback Dray
+            // Determine the direction of knockback from relative position
+            Vector2 delta = transform.position - coll.transform.position;
+            if (Mathf.Abs (delta.x) >= Mathf.Abs (delta.y))
+            {
+                // Knockback should be horizontal
+                delta.x = (delta.x > 0) ? 1 : -1;
+                delta.y = 0;
+            }
+            else
+            {
+                // Knockback should be vertical
+                delta.y = (delta.y > 0) ? 1 : -1;
+                delta.x = 0;                
+            }
 
-    //         // Apply knockback speed to the Rigidbody
-    //         knockbackVel = delta * knockbackSpeed;
-    //         rigid.velocity = knockbackVel;
+            // Apply knockback speed to the Rigidbody
+            knockbackVel = delta * knockbackSpeed;
+            rigid.velocity = knockbackVel;
 
-    //         // Set mode to knockback and set time to stop knockback
-    //         mode = eMode.knockback;
-    //         knockbackDone = Time.time + knockbackDuration;
-    //     }
-    // }
+            // Set mode to knockback and set time to stop knockback
+            mode = eMode.knockback;
+            knockbackDone = Time.time + knockbackDuration;
+        }
+    }
 
     void OnTriggerEnter2D (Collider2D colld)
     {
+        PickUp pup = colld.GetComponent<PickUp>();
+
+        if (pup == null) return ;
+        switch (pup.itemType) {
+            case PickUp.eType.health:
+                health = Mathf.Min(health + healthPickupAmount, maxHealth);
+                break;
+            case PickUp.eType.key:
+                _numKeys++;
+                break;
+            default:
+                Debug.LogError("No case for PickUp type " + pup.itemType);
+                break;
+        }
+        Destroy(pup.gameObject);
     }
 
     static public int HEALTH        { get { return S._health;  }}

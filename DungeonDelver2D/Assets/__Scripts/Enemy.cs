@@ -15,7 +15,7 @@ public class Enemy : MonoBehaviour
     public float            invincibleDuration = 0.5f;
 
     [SerializeField]
-    private GameObject      _guaranteedDrop = null;
+    private GameObject      guaranteedDrop = null;
     public List<GameObject> randomItems;
 
     [Header("Dynamic: Enemy")]
@@ -41,58 +41,82 @@ public class Enemy : MonoBehaviour
 
     protected virtual void Update()
     {
+        if (invincible && Time.time > invincibleDone) invincible = false;
+        sRend.color = invincible ? Color.red : Color.white;
+        if (knockback) {
+            rigid.velocity = knockbackVel;
+            if (Time.time < knockbackDone) return ;
+        }
+        anim.speed = 1;
+        knockback = false;
     }
 
-    // void OnTriggerEnter2D (Collider2D colld)
-    // {
-    //     if (invincible) return;      // Return if this can't be damaged
-    //     DamageEffect dEf = colld.gameObject.GetComponent<DamageEffect>();
-    //     if (dEf == null) return;    // If no DamageEffect, exit
+    void OnTriggerEnter2D (Collider2D colld)
+    {
+        if (invincible) return;      // Return if this can't be damaged
+        DamageEffect dEf = colld.gameObject.GetComponent<DamageEffect>();
+        if (dEf == null) return;    // If no DamageEffect, exit
 
-    //     health -= dEf.damage;       // Subtract the damage amount from health
-    //     if (health <= 0)
-    //         Die();
+        health -= dEf.damage;       // Subtract the damage amount from health
+        if (health <= 0)
+            Die();
 
-    //     invincible = true;
-    //     invincibleDone = Time.time + invincibleDuration;
+        invincible = true;
+        invincibleDone = Time.time + invincibleDuration;
 
-    //     if (dEf.knockback)
-    //     {
-    //         Vector2 delta;
-    //         // Is an IFacingMover attached to the Collider that triggered this?
-    //         IFacingMover iFM = colld.GetComponent<IFacingMover>();
-    //         if (iFM != null)
-    //         {
-    //             // Determine the direction of knockback from the iFM's facing
-    //             delta = directions[iFM.GetFacing()];
-    //         }
-    //         else
-    //         {
-    //             // Determine the direction of knockback from relative position
-    //             delta = transform.position - colld.transform.position;
-    //             if (Mathf.Abs (delta.x) >= Mathf.Abs (delta.y))
-    //             {
-    //                 // Knockback should be horizontal
-    //                 delta.x = (delta.x > 0) ? 1 : -1;
-    //                 delta.y = 0;
-    //             }
-    //             else
-    //             {
-    //                 // Knockback should be vertical
-    //                 delta.y = (delta.y > 0) ? 1 : -1;
-    //                 delta.x = 0;                
-    //             }
-    //         }
+        if (dEf.knockback)
+        {
+            Vector2 delta;
+            // Is an IFacingMover attached to the Collider that triggered this?
+            IFacingMover iFM = colld.GetComponent<IFacingMover>();
+            if (iFM != null)
+            {
+                // Determine the direction of knockback from the iFM's facing
+                delta = directions[iFM.GetFacing()];
+            }
+            else
+            {
+                // Determine the direction of knockback from relative position
+                delta = transform.position - colld.transform.position;
+                if (Mathf.Abs (delta.x) >= Mathf.Abs (delta.y))
+                {
+                    // Knockback should be horizontal
+                    delta.x = (delta.x > 0) ? 1 : -1;
+                    delta.y = 0;
+                }
+                else
+                {
+                    // Knockback should be vertical
+                    delta.y = (delta.y > 0) ? 1 : -1;
+                    delta.x = 0;                
+                }
+            }
 
-    //         // Apply knockback speed to the Rigidbody
-    //         knockbackVel = delta * knockbackSpeed;
-    //         rigid.velocity = knockbackVel;
+            // Apply knockback speed to the Rigidbody
+            knockbackVel = delta * knockbackSpeed;
+            rigid.velocity = knockbackVel;
 
-    //         // Set mode to knockback and set time to stop knockback
-    //         knockback = true;;
-    //         knockbackDone = Time.time + knockbackDuration;
-    //         anim.speed = 0;
-    //     }
-    // }
+            // Set mode to knockback and set time to stop knockback
+            knockback = true;;
+            knockbackDone = Time.time + knockbackDuration;
+            anim.speed = 0;
+        }
+    }
+
+    void Die() {
+        GameObject go;
+        if (guaranteedDrop != null) {
+            go = Instantiate<GameObject>(guaranteedDrop);
+            go.transform.position = transform.position;
+        } else if (randomItems.Count > 0) {
+            int n = Random.Range(0, randomItems.Count);
+            GameObject prefab = randomItems[n];
+            if (prefab != null) {
+                go = Instantiate<GameObject>(prefab);
+                go.transform.position = transform.position;
+            }
+        }
+        Destroy(gameObject);
+    }
 
 }
