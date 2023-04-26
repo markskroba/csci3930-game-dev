@@ -41,6 +41,9 @@ public class TileSwapManager : MonoBehaviour
                     ISwappable iSwap = go.GetComponent<ISwappable>();
 
                     if (iSwap != null) {
+                        iSwap.Init(fromTileNum, i, j);
+                        iSwap.guaranteedDrop = tSwap.guaranteedDrop;
+                    } else {
                         go.transform.position = new Vector3(i, j, 0) + MapInfo.OFFSET;
                     }
                 }
