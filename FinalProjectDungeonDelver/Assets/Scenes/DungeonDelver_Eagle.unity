@@ -1531,6 +1531,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 317937111993209260, guid: 61f65c9342bbf447b9d540a5f078d0c4, type: 3}
+      propertyPath: angle
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 317937111993209260, guid: 61f65c9342bbf447b9d540a5f078d0c4, type: 3}
+      propertyPath: distance
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 5949686309062075084, guid: 61f65c9342bbf447b9d540a5f078d0c4, type: 3}
       propertyPath: m_RootOrder
       value: 4
