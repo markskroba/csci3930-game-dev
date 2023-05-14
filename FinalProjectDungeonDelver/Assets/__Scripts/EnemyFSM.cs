@@ -9,13 +9,28 @@ public class EnemyFSM : MonoBehaviour
     public Sight sightSensor;
     public float playerAttackDistance;
 
-    public enum PatrolDirectionAxis { X, Y };
+    public enum PatrolDirectionAxis  { X, Y };
+    public PatrolDirectionAxis currentPatrolDirectionAxis;
+    public Vector2 currentPatrolDirection;
+    public float timeNextDirectionReversal = 0;
     public float PatrolLength;
+
+    private Enemy e;
+    private Rigidbody2D rb;
 
     //private GameObject parent;
     // Start is called before the first frame update
     void Start()
     {
+    }
+
+    private void Awake()
+    {
+        e = this.GetComponentInParent<Enemy>();
+        rb = this.GetComponentInParent<Rigidbody2D>();
+
+        if (currentPatrolDirectionAxis == 0) currentPatrolDirection = Vector2.right;
+        else currentPatrolDirection = Vector2.down;
     }
 
     // Update is called once per frame
@@ -27,7 +42,6 @@ public class EnemyFSM : MonoBehaviour
     }
 
     void Attack() {
-        print(sightSensor.detectedObject);
         if (sightSensor.detectedObject == null) {
             print("State changing to patrol");
             currentState = EnemyState.Patrol;
@@ -66,9 +80,20 @@ public class EnemyFSM : MonoBehaviour
         }
         else 
         {
-            Vector2 direction = Vector2.down;
-            GameObject parent = this.transform.parent.gameObject;
-            // parent.transform.position = direction * 3 * Time.deltaTime;
+            if (Time.time >= timeNextDirectionReversal) {
+                reversePatrolDirection();
+            }
+            rb.velocity = currentPatrolDirection * 2;
         }
+    }
+
+    void reversePatrolDirection()
+    {
+        if (currentPatrolDirection == Vector2.down)  currentPatrolDirection = Vector2.up;
+        else if (currentPatrolDirection == Vector2.up) currentPatrolDirection = Vector2.down;
+        else if (currentPatrolDirection == Vector2.right) currentPatrolDirection = Vector2.left;
+        else currentPatrolDirection = Vector2.right;
+
+        timeNextDirectionReversal = Time.time + 2;
     }
 }
