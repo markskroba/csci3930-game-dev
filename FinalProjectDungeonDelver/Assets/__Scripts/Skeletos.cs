@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent (typeof(InRoom))]
-//public class Skeletos : Enemy, IFacingMover
 public class Skeletos : Enemy, IFacingMover
 {
     [Header("Inscribed: Skeletos")]
@@ -26,10 +25,6 @@ public class Skeletos : Enemy, IFacingMover
     protected override void Update() {
         base .Update();
         if (knockback) return;
-        if (Time.time >= timeNextDecision) {
-            DecideDirection();
-        }
-        rigid.velocity = directions[facing] * speed;
     }
 
     void DecideDirection() {
@@ -37,29 +32,36 @@ public class Skeletos : Enemy, IFacingMover
         timeNextDecision = Time.time + Random.Range(timeThinkMin, timeThinkMax);
     }
 
+    void BeginPatrol() {
+        print("Patrol has begun");
+        return;
+    }
 
-    // // ---------------- Implementation of IFacingMover -------------------
-    public int GetFacing()  { return facing % 4; }      // different from Dray
+    public int GetFacing() { return facing % 4; }      // different from Dray
 
     public float GetSpeed() { return speed; }
 
-    public bool moving      { get { return (facing < 4); } }    // different from Dray
+    public bool moving { get { return (facing < 4); } }    // different from Dray
 
-    public float gridMult   { get { return inRm.gridMult; } }
+    public float gridMult { get { return inRm.gridMult; } }
 
-    public bool isInRoom    { get { return inRm.isInRoom; } }
+    public bool isInRoom { get { return inRm.isInRoom; } }
 
-    public Vector2 roomNum {
+    public Vector2 roomNum
+    {
         get { return inRm.roomNum; }
         set { inRm.roomNum = value; }
     }
 
-    public Vector2 posInRoom {
+    public Vector2 posInRoom
+    {
         get { return inRm.posInRoom; }
         set { inRm.posInRoom = value; }
     }
 
-    public Vector2 GetGridPosInRoom (float mult = -1) {
-        return inRm.GetGridPosInRoom (mult);
+    public Vector2 GetGridPosInRoom(float mult = -1)
+    {
+        return inRm.GetGridPosInRoom(mult);
     }
+
 }

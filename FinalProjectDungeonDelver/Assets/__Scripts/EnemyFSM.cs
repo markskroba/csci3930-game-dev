@@ -8,10 +8,14 @@ public class EnemyFSM : MonoBehaviour
     public EnemyState currentState;
     public Sight sightSensor;
     public float playerAttackDistance;
+
+    public enum PatrolDirectionAxis { X, Y };
+    public float PatrolLength;
+
+    //private GameObject parent;
     // Start is called before the first frame update
     void Start()
     {
-        
     }
 
     // Update is called once per frame
@@ -36,10 +40,17 @@ public class EnemyFSM : MonoBehaviour
         }
     }
     void Chase() {
-        if (sightSensor.detectedObject == null) {
+        if (sightSensor.detectedObject == null)
+        {
             print("State changing to patrol");
             currentState = EnemyState.Patrol;
             return;
+        }
+        else { 
+            // actual movement: find a vector from enemy to player
+            Vector3 dest = sightSensor.detectedObject.transform.position;
+            GameObject parent = this.transform.parent.gameObject;
+            parent.transform.position += (dest - parent.transform.position).normalized * parent.GetComponent<Skeletos>().speed * Time.deltaTime;
         }
 
         float distanceToPlayer = Vector2.Distance(transform.position, sightSensor.detectedObject.transform.position);
@@ -48,9 +59,16 @@ public class EnemyFSM : MonoBehaviour
         }
     }
     void Patrol() {
-        if (sightSensor.detectedObject != null) {
+        if (sightSensor.detectedObject != null)
+        {
             print("State changing to chase");
             currentState = EnemyState.Chase;
+        }
+        else 
+        {
+            Vector2 direction = Vector2.down;
+            GameObject parent = this.transform.parent.gameObject;
+            // parent.transform.position = direction * 3 * Time.deltaTime;
         }
     }
 }

@@ -69,6 +69,7 @@ MonoBehaviour:
   currentState: 0
   sightSensor: {fileID: 317937111993209260}
   playerAttackDistance: 0
+  PatrolLength: 0
 --- !u!1 &5949686309062075120
 GameObject:
   m_ObjectHideFlags: 0
@@ -83,7 +84,6 @@ GameObject:
   - component: {fileID: 5949686309062075121}
   - component: {fileID: 5949686309062075085}
   - component: {fileID: 5949686309062075086}
-  - component: {fileID: 5949686309062075087}
   - component: {fileID: 2038562738}
   - component: {fileID: 2038562739}
   m_Layer: 7
@@ -247,18 +247,6 @@ MonoBehaviour:
   keepInRoom: 1
   gridMult: 1
   radius: 0.5
---- !u!114 &5949686309062075087
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5949686309062075120}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbc160ce7f5a5471096dcfb2ebef46af, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!58 &2038562738
 CircleCollider2D:
   m_ObjectHideFlags: 0
