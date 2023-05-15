@@ -13,7 +13,7 @@ public class EnemyFSM : MonoBehaviour
     public PatrolDirectionAxis currentPatrolDirectionAxis;
     public Vector2 currentPatrolDirection;
     public float timeNextDirectionReversal = 0;
-    public float PatrolLength;
+    public float patrolDuration;
 
     public float FleeTime = 3f;
     public float currentFleeTime = 0;
@@ -90,7 +90,7 @@ public class EnemyFSM : MonoBehaviour
             if (Time.time >= timeNextDirectionReversal) {
                 reversePatrolDirection();
             }
-            rb.velocity = currentPatrolDirection * 2;
+            rb.velocity = currentPatrolDirection * patrolDuration;
         }
     }
 

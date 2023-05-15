@@ -56,6 +56,9 @@ public class Dray : MonoBehaviour, IFacingMover, IKeyMaster
         KeyCode.RightArrow, KeyCode.UpArrow, KeyCode.LeftArrow, KeyCode.DownArrow,
         KeyCode.D,          KeyCode.W,       KeyCode.A,         KeyCode.S };
 
+    private bool isSpeedBoostEnabled = false;
+    private float speedBoostTime = 0;
+
     void Awake()
     {
         S = this;
@@ -126,6 +129,13 @@ public class Dray : MonoBehaviour, IFacingMover, IKeyMaster
                 anim.speed = 1;
                 break;
         }
+
+        if (isSpeedBoostEnabled && Time.time >= speedBoostTime) {
+            speed = (float) (speed / 1.5);
+            isSpeedBoostEnabled = false;
+            speedBoostTime = 0;
+        }
+
         rigid.velocity = vel * speed;
     }
 
@@ -214,6 +224,19 @@ public class Dray : MonoBehaviour, IFacingMover, IKeyMaster
                 break;
             case PickUp.eType.key:
                 _numKeys++;
+                break;
+            case PickUp.eType.speedBoost:
+                speed = (float) (speed * 1.5);
+                isSpeedBoostEnabled = true;
+                speedBoostTime = Time.time + 3f;
+                break;
+            case PickUp.eType.damageBoost:
+                // DamageEffect de = GameObject.Find("Sword").GetComponent<DamageEffect>();
+
+                Transform swordT = this.transform.Find("SwordController").Find("Sword");
+                DamageEffect de = swordT.gameObject.GetComponent<DamageEffect>();
+                print(de.damage);
+                de.damage *= 2;
                 break;
             default:
                 Debug.LogError("No case for PickUp type " + pup.itemType);
