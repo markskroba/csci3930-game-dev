@@ -130,7 +130,8 @@ public class EnemyFSM : MonoBehaviour
     }
 
     void Flee() {
-        Vector3 dest = sightSensor.detectedObject.transform.position;
+        // Vector3 dest = sightSensor.detectedObject.transform.position;
+        Vector3 dest = GameObject.Find("Dray").transform.position;
         GameObject parent = this.transform.parent.gameObject;
         parent.transform.position += (dest - parent.transform.position).normalized * -1 * parent.GetComponent<Skeletos>().speed * Time.deltaTime;
 
@@ -156,7 +157,8 @@ public class EnemyFSM : MonoBehaviour
             return;
         }
         else { 
-            Vector3 dest = sightSensor.detectedObject.transform.position;
+            // Vector3 dest = sightSensor.detectedObject.transform.position;
+            Vector3 dest = GameObject.Find("Dray").transform.position;
             GameObject parent = this.transform.parent.gameObject;
             parent.transform.position += (dest - parent.transform.position).normalized * parent.GetComponent<Skeletos>().speed * Time.deltaTime;
             rb.velocity = (dest - parent.transform.position) * parent.GetComponent<Skeletos>().speed * Time.deltaTime;

@@ -9,6 +9,12 @@ public class Dray : MonoBehaviour, IFacingMover, IKeyMaster
     static public IFacingMover  IFM;
     public enum eMode { idle, move, attack, roomTrans, knockback };
 
+    public int rangeAttackCounter = 0;
+    public GameObject projectile;
+    public float projectileFlightTime = 2f;
+    private float maxProjectileFlightTime = 0f;
+
+
     [Header ("Inscribed")]
     public float            speed = 5;
     public float            attackDuration = 0.25f;   // num secs to attack
@@ -118,6 +124,20 @@ public class Dray : MonoBehaviour, IFacingMover, IKeyMaster
             case eMode.attack:
                 anim.Play("Dray_Attack_"+facing);
                 anim.speed = 0;
+
+                if (rangeAttackCounter > 0 && (GameObject.Find("SwordProjectile(Clone)") == null || maxProjectileFlightTime == 0))
+                {
+                    print("PROIJECTILE FLIGHT TIME " + maxProjectileFlightTime);
+                    GameObject projectileGO = Instantiate<GameObject>(projectile);
+                    projectileGO.transform.position = transform.position;
+                    projectileGO.transform.rotation = Quaternion.Euler(0, 0, 90 * facing);
+                    Rigidbody2D projectileRB = projectileGO.GetComponent<Rigidbody2D>();
+                    projectileRB.velocity = directions[facing] * 4;
+                    maxProjectileFlightTime = Time.time + projectileFlightTime;
+                    print(maxProjectileFlightTime);
+                    rangeAttackCounter--;
+                }
+
                 break;
             case eMode.idle:
                 anim.Play("Dray_Walk_"+facing);
@@ -134,6 +154,12 @@ public class Dray : MonoBehaviour, IFacingMover, IKeyMaster
             speed = (float) (speed / 1.5);
             isSpeedBoostEnabled = false;
             speedBoostTime = 0;
+        }
+
+        if (maxProjectileFlightTime != 0 && Time.time >= maxProjectileFlightTime)
+        {
+            Destroy(GameObject.Find("SwordProjectile(Clone)"));
+            maxProjectileFlightTime = 0;
         }
 
         rigid.velocity = vel * speed;
@@ -231,12 +257,13 @@ public class Dray : MonoBehaviour, IFacingMover, IKeyMaster
                 speedBoostTime = Time.time + 3f;
                 break;
             case PickUp.eType.damageBoost:
-                // DamageEffect de = GameObject.Find("Sword").GetComponent<DamageEffect>();
-
                 Transform swordT = this.transform.Find("SwordController").Find("Sword");
                 DamageEffect de = swordT.gameObject.GetComponent<DamageEffect>();
                 print(de.damage);
                 de.damage *= 2;
+                break;
+            case PickUp.eType.rangeAttack:
+                rangeAttackCounter += 5;
                 break;
             default:
                 Debug.LogError("No case for PickUp type " + pup.itemType);

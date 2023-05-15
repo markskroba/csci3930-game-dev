@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PickUp : MonoBehaviour
 {
-    public enum eType {none, key, health, speedBoost, damageBoost}
+    public enum eType {none, key, health, speedBoost, damageBoost, rangeAttack}
     [Header("Insribed")]
     public eType itemType;
 
