@@ -32,11 +32,6 @@ public class Skeletos : Enemy, IFacingMover
         timeNextDecision = Time.time + Random.Range(timeThinkMin, timeThinkMax);
     }
 
-    void BeginPatrol() {
-        print("Patrol has begun");
-        return;
-    }
-
     public int GetFacing() { return facing % 4; }      // different from Dray
 
     public float GetSpeed() { return speed; }

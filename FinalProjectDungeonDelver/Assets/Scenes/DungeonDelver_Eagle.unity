@@ -1592,6 +1592,10 @@ PrefabInstance:
       propertyPath: currentState
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 2410004439574139445, guid: 61f65c9342bbf447b9d540a5f078d0c4, type: 3}
+      propertyPath: currentPatrolDirectionAxis
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5949686309062075084, guid: 61f65c9342bbf447b9d540a5f078d0c4, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -1635,6 +1639,14 @@ PrefabInstance:
     - target: {fileID: 5949686309062075084, guid: 61f65c9342bbf447b9d540a5f078d0c4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5949686309062075085, guid: 61f65c9342bbf447b9d540a5f078d0c4, type: 3}
+      propertyPath: knockbackSpeed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5949686309062075085, guid: 61f65c9342bbf447b9d540a5f078d0c4, type: 3}
+      propertyPath: knockbackDuration
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5949686309062075120, guid: 61f65c9342bbf447b9d540a5f078d0c4, type: 3}
       propertyPath: m_Name

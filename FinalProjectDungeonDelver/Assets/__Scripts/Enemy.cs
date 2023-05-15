@@ -10,8 +10,8 @@ public class Enemy : MonoBehaviour
 
     [Header("Inscribed: Enemy")]
     public float            maxHealth = 1;
-    public float            knockbackSpeed = 10;
-    public float            knockbackDuration = 0.25f;
+    public float            knockbackSpeed = 5;
+    public float            knockbackDuration = 0.1f;
     public float            invincibleDuration = 0.5f;
 
     [SerializeField]
@@ -60,6 +60,13 @@ public class Enemy : MonoBehaviour
         health -= dEf.damage;       // Subtract the damage amount from health
         if (health <= 0)
             Die();
+        else {
+            // flee/angered patrol changes
+            EnemyFSM fsm = this.GetComponentInChildren<EnemyFSM>();
+            if (fsm != null) {
+                fsm.decideOnReceivingDamage();
+            }  
+        }
 
         invincible = true;
         invincibleDone = Time.time + invincibleDuration;

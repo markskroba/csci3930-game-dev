@@ -15,6 +15,10 @@ public class EnemyFSM : MonoBehaviour
     public float timeNextDirectionReversal = 0;
     public float PatrolLength;
 
+    public float FleeTime = 3f;
+    public float currentFleeTime = 0;
+    public float originalSightDistance;
+
     private Enemy e;
     private Rigidbody2D rb;
 
@@ -38,6 +42,8 @@ public class EnemyFSM : MonoBehaviour
     {
         if (currentState == EnemyState.Patrol) { Patrol(); }
         else if (currentState == EnemyState.Chase) { Chase(); }
+        else if (currentState == EnemyState.Flee) { Flee(); }
+        else if (currentState == EnemyState.AngeredPatrol) { AngeredPatrol(); }
         else { Attack(); }
     }
 
@@ -65,6 +71,7 @@ public class EnemyFSM : MonoBehaviour
             Vector3 dest = sightSensor.detectedObject.transform.position;
             GameObject parent = this.transform.parent.gameObject;
             parent.transform.position += (dest - parent.transform.position).normalized * parent.GetComponent<Skeletos>().speed * Time.deltaTime;
+            rb.velocity = (dest - parent.transform.position) * parent.GetComponent<Skeletos>().speed * Time.deltaTime;
         }
 
         float distanceToPlayer = Vector2.Distance(transform.position, sightSensor.detectedObject.transform.position);
@@ -96,4 +103,69 @@ public class EnemyFSM : MonoBehaviour
 
         timeNextDirectionReversal = Time.time + 2;
     }
+
+    public void decideOnReceivingDamage() {
+        float chance = Random.Range(0, 2);
+        print(chance);
+        if (chance > 1f)
+        {
+            print("State changing to Flee");
+            originalSightDistance = sightSensor.distance;
+            print("Values saved as " + originalSightDistance);
+            sightSensor.distance = 100;
+            if (currentFleeTime == 0)
+            {
+                currentFleeTime = Time.time + FleeTime;
+                print("new flee time: " + currentFleeTime);
+            }
+            currentState = EnemyState.Flee;
+        }
+        else
+        {
+            print("State changing to Angered Patrol");
+            originalSightDistance = sightSensor.distance;
+            sightSensor.distance = (float) (sightSensor.distance * 1.5);
+            currentState = EnemyState.AngeredPatrol;
+        }
+    }
+
+    void Flee() {
+        Vector3 dest = sightSensor.detectedObject.transform.position;
+        GameObject parent = this.transform.parent.gameObject;
+        parent.transform.position += (dest - parent.transform.position).normalized * -1 * parent.GetComponent<Skeletos>().speed * Time.deltaTime;
+
+        if (Time.time >= currentFleeTime)
+        {
+            currentFleeTime = 0;
+            sightSensor.distance = originalSightDistance;
+            print("Sight distance was saved as " + originalSightDistance + "");
+            print("State changing to patrol");
+            currentState = EnemyState.Patrol;
+            return;
+        }
+    }
+
+    void AngeredPatrol() {
+        if (sightSensor.detectedObject == null)
+        {
+            print("distance was " + sightSensor.distance + ", saved was " + originalSightDistance);
+            sightSensor.distance = originalSightDistance;
+            print("distance now is " + sightSensor.distance);
+            print("State changing to patrol");
+            currentState = EnemyState.Patrol;
+            return;
+        }
+        else { 
+            Vector3 dest = sightSensor.detectedObject.transform.position;
+            GameObject parent = this.transform.parent.gameObject;
+            parent.transform.position += (dest - parent.transform.position).normalized * parent.GetComponent<Skeletos>().speed * Time.deltaTime;
+            rb.velocity = (dest - parent.transform.position) * parent.GetComponent<Skeletos>().speed * Time.deltaTime;
+        }
+
+        float distanceToPlayer = Vector2.Distance(transform.position, sightSensor.detectedObject.transform.position);
+        if (distanceToPlayer <= playerAttackDistance) {
+            currentState = EnemyState.Attack;
+        }
+    }
 }
+
