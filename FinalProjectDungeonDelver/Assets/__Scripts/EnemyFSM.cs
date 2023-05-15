@@ -107,7 +107,7 @@ public class EnemyFSM : MonoBehaviour
     public void decideOnReceivingDamage() {
         float chance = Random.Range(0, 2);
         print(chance);
-        if (chance > 1f)
+        if (chance <= .5f)
         {
             print("State changing to Flee");
             originalSightDistance = sightSensor.distance;
