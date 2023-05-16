@@ -8,8 +8,10 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        print("triggered " + collision.gameObject.name);
-        if (shooterPrefab != null && shooterPrefab.name != collision.gameObject.name && collision.gameObject.name != "Sword") Destroy(this.gameObject);
+        if (shooterPrefab != null && !collision.gameObject.name.Contains(shooterPrefab.name) && collision.gameObject.name != "Sword")
+        {
+            Destroy(this.gameObject);
+        }
     }
     // Start is called before the first frame update
     void Start()

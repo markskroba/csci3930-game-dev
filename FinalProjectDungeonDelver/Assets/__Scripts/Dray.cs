@@ -73,7 +73,7 @@ public class Dray : MonoBehaviour, IFacingMover, IKeyMaster
         rigid = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         inRm = GetComponent<InRoom>();
-        health = maxHealth;
+        health = 5;
     }
 
     void Update() {

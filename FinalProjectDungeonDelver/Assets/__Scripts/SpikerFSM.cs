@@ -46,8 +46,6 @@ public class SpikerFSM : EnemyFSM
             Vector3 dir = (dest - transform.position).normalized;
 
             projectileRB.velocity = dir * 4;
-            //projectileGO.transform.position += (dest - this.transform.parent.gameObject.transform.position).normalized * 2 * Time.deltaTime;
-            //projectileRB.velocity = (dest - this.transform.parent.gameObject.transform.position).normalized * 2 * Time.deltaTime;
             print("spawning sword");
             currentProjectileDelay = Time.time + projectileDelay;
         }
