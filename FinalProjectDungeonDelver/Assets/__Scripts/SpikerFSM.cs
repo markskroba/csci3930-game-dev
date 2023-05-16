@@ -35,6 +35,7 @@ public class SpikerFSM : EnemyFSM
         if (sightSensor.detectedObject == null) {
             print("State changing to rest");
             spikerCurrentState = EnemyState.Rest;
+            return;
         }
         if (currentProjectileDelay == 0)
         {
