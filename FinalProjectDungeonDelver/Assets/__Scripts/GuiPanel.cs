@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GuiPanel : MonoBehaviour
 {
@@ -13,9 +14,13 @@ public class GuiPanel : MonoBehaviour
     Text        keyCountText;
     List<Image> healthImages;
 
+    private float gameOverTime = 5;
+    private float currentGameOverTime = 0;
+
     // Start is called before the first frame update
     void Start()
     {
+        transform.Find("Game Over Panel").gameObject.SetActive(false) ;
         // Key Count
         Transform trans = transform.Find ("Key Count");
         keyCountText = trans.GetComponent<Text>();
@@ -52,6 +57,23 @@ public class GuiPanel : MonoBehaviour
                 healthImages[i].sprite = healthEmpty;
 
             healthDisp -= 2;
+        }
+
+        if (Dray.HEALTH == 0 && currentGameOverTime == 0) 
+        {
+            Time.timeScale = 0;
+            currentGameOverTime = Time.unscaledTime + gameOverTime;
+
+            GameObject healthPanel = transform.Find ("Health Panel").gameObject;
+            healthPanel.SetActive(false);
+            transform.Find("Game Over Panel").gameObject.SetActive(true) ;
+        };
+
+        if (Time.unscaledTime >= currentGameOverTime && currentGameOverTime != 0)
+        {
+            Time.timeScale = 1;
+            Scene scene = SceneManager.GetActiveScene();
+            SceneManager.LoadScene(scene.name);
         }
     }
 }
