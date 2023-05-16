@@ -47,7 +47,7 @@ public class Enemy : MonoBehaviour
             rigid.velocity = knockbackVel;
             if (Time.time < knockbackDone) return ;
         }
-        anim.speed = 1;
+        if (anim != null) anim.speed = 1;
         knockback = false;
     }
 
@@ -55,7 +55,7 @@ public class Enemy : MonoBehaviour
     {
         if (invincible) return;      // Return if this can't be damaged
         DamageEffect dEf = colld.gameObject.GetComponent<DamageEffect>();
-        if (dEf == null) return;    // If no DamageEffect, exit
+        if (dEf == null || dEf.name == "SpikerProjectile(Clone)") return;    // If no DamageEffect, exit
 
         health -= dEf.damage;       // Subtract the damage amount from health
         if (health <= 0)
@@ -106,7 +106,7 @@ public class Enemy : MonoBehaviour
             // Set mode to knockback and set time to stop knockback
             knockback = true;;
             knockbackDone = Time.time + knockbackDuration;
-            anim.speed = 0;
+            if (anim != null) anim.speed = 0;
         }
     }
 

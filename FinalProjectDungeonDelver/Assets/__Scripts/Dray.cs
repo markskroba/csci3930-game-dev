@@ -127,14 +127,12 @@ public class Dray : MonoBehaviour, IFacingMover, IKeyMaster
 
                 if (rangeAttackCounter > 0 && (GameObject.Find("SwordProjectile(Clone)") == null || maxProjectileFlightTime == 0))
                 {
-                    print("PROIJECTILE FLIGHT TIME " + maxProjectileFlightTime);
                     GameObject projectileGO = Instantiate<GameObject>(projectile);
                     projectileGO.transform.position = transform.position;
                     projectileGO.transform.rotation = Quaternion.Euler(0, 0, 90 * facing);
                     Rigidbody2D projectileRB = projectileGO.GetComponent<Rigidbody2D>();
                     projectileRB.velocity = directions[facing] * 4;
                     maxProjectileFlightTime = Time.time + projectileFlightTime;
-                    print(maxProjectileFlightTime);
                     rangeAttackCounter--;
                 }
 
@@ -203,10 +201,14 @@ public class Dray : MonoBehaviour, IFacingMover, IKeyMaster
 
     void OnCollisionEnter2D (Collision2D coll)
     {
+        print("COLLIDED");
         if (invincible) return;      // Return if Dray can't be damaged
         DamageEffect dEf = coll.gameObject.GetComponent<DamageEffect>();
         if (dEf == null) return;    // If no DamageEffect, exit
+        TakeDamage(dEf);
+    }
 
+    void TakeDamage(DamageEffect dEf) { 
         health -= dEf.damage;       // Subtract the damage amount from health
         invincible = true;
         invincibleDone = Time.time + invincibleDuration;
@@ -215,7 +217,7 @@ public class Dray : MonoBehaviour, IFacingMover, IKeyMaster
         {
             // Knockback Dray
             // Determine the direction of knockback from relative position
-            Vector2 delta = transform.position - coll.transform.position;
+            Vector2 delta = transform.position - dEf.transform.position;
             if (Mathf.Abs (delta.x) >= Mathf.Abs (delta.y))
             {
                 // Knockback should be horizontal
@@ -241,6 +243,10 @@ public class Dray : MonoBehaviour, IFacingMover, IKeyMaster
 
     void OnTriggerEnter2D (Collider2D colld)
     {
+        if (colld.GetComponent<DamageEffect>() != null) {
+            TakeDamage(colld.GetComponent<DamageEffect>());
+        }
+
         PickUp pup = colld.GetComponent<PickUp>();
 
         if (pup == null) return ;
